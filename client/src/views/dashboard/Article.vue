@@ -115,7 +115,7 @@ onMounted(() => {
 
 const loadBlogs = async () => {
   let res = await axios.get(
-    `/blog/search?page=${pageInfo.page}&pagesize=${pageInfo.pagesize}`
+    `/blog/search?page=${pageInfo.page}&pagesize=${pageInfo.pagesize}`,
   );
   let temp_rows = res.data.data.rows;
   for (let row of temp_rows) {
@@ -160,7 +160,7 @@ const toPage = async (pageNumber) => {
 
 const toUpdate = async (blog) => {
   tabValue.value = "update";
-  let res = await addxios.post("/blog/detail?id=" + blog.id);
+  let res = await axios.post("/blog/detail?id=" + blog.id);
   updateArticle.id = blog.id;
   updateArticle.title = res.data.rows[0].title;
   updateArticle.content = res.data.rows[0].content;

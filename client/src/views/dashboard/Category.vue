@@ -15,8 +15,8 @@
           <td>{{ category.name }}</td>
           <td>
             <n-space>
-              <n-button @on-click="toUpdate(category)">修改</n-button>
-              <n-button @on-click="deleteCategory(category)">删除</n-button>
+              <n-button @click="toUpdate(category)">修改</n-button>
+              <n-button @click="deleteCategory(category)">删除</n-button>
             </n-space>
           </td>
         </tr>
@@ -88,12 +88,12 @@ onMounted(() => {
 });
 
 const add = async () => {
-  let res = await addxios.post("/category/_token/add", {
+  let res = await axios.post("/category/_token/add", {
     name: addCategory.name,
   });
   if (res.data.code == 200) {
     loadDatas();
-    message.info(res.msg);
+    message.info(res.data.msg);
   } else {
     message.error(res.data.msg);
   }
@@ -110,7 +110,7 @@ const toUpdate = async (category) => {
   updateCategory.name = category.name;
 };
 const update = async () => {
-  let res = await addxios.put("/category/_token/update", {
+  let res = await axios.put("/category/_token/update", {
     name: updateCategory.name,
     id: updateCategory.id,
   });
@@ -127,21 +127,23 @@ const update = async () => {
 const deleteCategory = async (category) => {
   dialog.warning({
     title: "警告",
-    content: "你确定要删掉？？",
+    content: "你确定要删除吗？",
     positiveText: "确定",
     negativeText: "取消",
     draggable: true,
     onPositiveClick: async () => {
-      message.success("确定");
+      let res = await axios.post(`/category/_token/delete?id=${category.id}`);
+      if (res.data.code == 200) {
+        message.info(res.data.msg);
+        loadDatas(); // 刷新列表
+      } else {
+        message.error(res.data.msg);
+      }
     },
-    onNegativeClick: () => {},
+    onNegativeClick: () => {
+      message.info("已取消删除");
+    },
   });
-  let res = await addxios.post(`/category/_token/delete?id=${category.id}`);
-  if (res.data.code == 200) {
-    message.info(res.data.msg);
-  } else {
-    message.error(res.data.msg);
-  }
 };
 </script>
 
