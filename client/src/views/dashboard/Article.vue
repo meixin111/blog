@@ -69,7 +69,7 @@
       </n-form>
     </n-tab-pane>
   </n-tabs>
-  {{ addArticle.content }}
+  <!-- {{ addArticle.content }} -->
 </template>
 
 <script setup>
@@ -93,6 +93,7 @@ const addArticle = reactive({
 });
 
 const updateArticle = reactive({
+  id: 0,
   title: "",
   content: "",
   categoryId: 0,
@@ -121,7 +122,7 @@ const loadBlogs = async () => {
   for (let row of temp_rows) {
     row.content += "...";
     let d = new Date(row.create_time);
-    row.create_time = `${d.getFullYear()}年${d.getMonth + 1}月${d.getDate()}日`;
+    row.create_time = `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
   }
   blogListInfo.value = temp_rows;
   pageInfo.count = res.data.data.count;
@@ -135,7 +136,7 @@ const loadBlogs = async () => {
 };
 const loadCategorys = async () => {
   let res = await axios.get("/category/list");
-  categoryOptions.value = res.data.row.map((item) => {
+  categoryOptions.value = res.data.data.rows.map((item) => {
     return {
       label: item.name,
       value: item.id,
@@ -160,15 +161,15 @@ const toPage = async (pageNumber) => {
 
 const toUpdate = async (blog) => {
   tabValue.value = "update";
-  let res = await axios.post("/blog/detail?id=" + blog.id);
+  let res = await axios.get("/blog/detail?id=" + blog.id);
   updateArticle.id = blog.id;
-  updateArticle.title = res.data.rows[0].title;
-  updateArticle.content = res.data.rows[0].content;
-  updateArticle.categoryId = res.data.rows[0].category_id;
+  updateArticle.title = res.data.data.rows[0].title;
+  updateArticle.content = res.data.data.rows[0].content;
+  updateArticle.categoryId = res.data.data.rows[0].category_id;
 };
 
 const update = async () => {
-  let res = await axios.post("/blog/_token/update", addArticle);
+  let res = await axios.post("/blog/_token/update", updateArticle);
   if (res.data.code == 200) {
     message.info(res.data.msg);
     loadBlogs();

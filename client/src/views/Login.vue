@@ -78,6 +78,8 @@ const login = async () => {
     }
     router.push("/dashboard");
     message.info("登录成功");
+    localStorage.setItem("token", result.data.data.token);
+    console.log("Token已存储到localStorage:", result.data.data.token);
   } else {
     message.error("登录失败");
   }

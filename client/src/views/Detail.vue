@@ -28,7 +28,7 @@ onMounted(() => {
 
 const loadBlogs = async () => {
   let res = await axios.get("/blog/detail?id=" + route.query.id);
-  blogInfo.value = res.data.rows[0];
+  blogInfo.value = res.data.data;
 };
 
 const back = () => {

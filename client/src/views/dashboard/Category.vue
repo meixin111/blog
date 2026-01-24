@@ -101,7 +101,7 @@ const add = async () => {
 };
 const loadDatas = async () => {
   let res = await axios.get("/category/list");
-  categoryList.value = res.data.rows;
+  categoryList.value = res.data.data.rows;
   console.log(res);
 };
 const toUpdate = async (category) => {
@@ -132,7 +132,7 @@ const deleteCategory = async (category) => {
     negativeText: "取消",
     draggable: true,
     onPositiveClick: async () => {
-      let res = await axios.post(`/category/_token/delete?id=${category.id}`);
+      let res = await axios.delete(`/category/_token/delete?id=${category.id}`);
       if (res.data.code == 200) {
         message.info(res.data.msg);
         loadDatas(); // 刷新列表

@@ -55,11 +55,21 @@ public class ArticleService {
     }
 
     public ResponseResult<Map<String, Object>> detail(Long id) {
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("文章不存在"));
+    Article article = articleRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("文章不存在"));
 
-        return ResponseResult.success(convertToMap(article));
-    }
+    // ========== 开始修改 ==========
+    // 原代码（错误）：return ResponseResult.success(convertToMap(article));
+    
+    // 新代码（正确）：
+    Map<String, Object> data = new HashMap<>();
+    List<Map<String, Object>> rows = new ArrayList<>();
+    rows.add(convertToMap(article));
+    data.put("rows", rows);
+    
+    return ResponseResult.success(data);
+    // ========== 修改结束 ==========
+}
 
     public ResponseResult<ArticleDTO> add(ArticleDTO dto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
