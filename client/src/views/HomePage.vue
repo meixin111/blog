@@ -111,7 +111,7 @@ const categoryName = computed(() => {
 
 const loadCategorys = async () => {
   let res = await axios.get("/category/list");
-  categoryOptions.value = res.data.row.map((item) => {
+  categoryOptions.value = res.data.rows.map((item) => {
     return {
       label: item.name,
       value: item.id,
@@ -125,13 +125,13 @@ const loadBlogs = async (page = 0) => {
     pageInfo.page = page;
   }
   let res = await axios.get(
-    `/blog/search?keyword=${pageInfo.keyword}&page=${pageInfo.page}&pagesize=${pageInfo.pagesize}&categoryId=${pageInfo.categoryId}`
+    `/blog/search?keyword=${pageInfo.keyword}&page=${pageInfo.page}&pagesize=${pageInfo.pagesize}&categoryId=${pageInfo.categoryId}`,
   );
   let temp_rows = res.data.data.rows;
-  for (let row of temp_rows) {
+  for (let rows of temp_rows) {
     row.content += "...";
-    let d = new Date(row.create_time);
-    row.create_time = `${d.getFullYear()}年${d.getMonth + 1}月${d.getDate()}日`;
+    let d = new Date(rows.create_time);
+    rows.create_time = `${d.getFullYear()}年${d.getMonth + 1}月${d.getDate()}日`;
   }
   blogListInfo.value = temp_rows;
   pageInfo.count = res.data.data.count;

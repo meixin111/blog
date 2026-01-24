@@ -2,7 +2,7 @@
   <div class="container">
     <n-button @click="back">返回</n-button>
     <!--标题-->
-    <n-h1></n-h1>
+    <n-h1>{{ blogInfo.title }}</n-h1>
     <!--文章内容-->
     <div class="blog-content">
       <div v-html="blogInfo.content"></div>
@@ -27,7 +27,7 @@ onMounted(() => {
 });
 
 const loadBlogs = async () => {
-  let res = await axios.get("/blog/detail?id=" + route.blog.id);
+  let res = await axios.get("/blog/detail?id=" + route.query.id);
   blogInfo.value = res.data.rows[0];
 };
 
