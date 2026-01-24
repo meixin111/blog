@@ -22,7 +22,6 @@ const axios = inject("axios");
 const adminStore = AdminStore();
 const router = useRouter();
 const route = useRoute();
-
 let menus = [
   { name: "文章管理", href: "/dashboard/article" },
   { name: "分类管理", href: "/dashboard/category" },
